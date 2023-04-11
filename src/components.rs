@@ -14,8 +14,8 @@ pub struct Viewport {
 impl Default for Viewport {
     fn default() -> Self {
         let size = Extent3d {
-            width: 512,
-            height: 512,
+            width: 200,
+            height: 200,
             ..default()
         };
         Viewport {

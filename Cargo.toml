@@ -22,11 +22,11 @@ bevy_window = { version = "0.10" }
 # bevy_pbr = { version = "0.10", optional = true }
 bevy_render = { version = "0.10" }
 
-belly = { git = "https://github.com/jkb0o/belly.git" }
+# belly = { git = "https://github.com/jkb0o/belly.git" }
 
 # # egui
-# bevy_egui = "0.20"
+bevy_egui = "0.20"
 # # bevy-inspector-egui = "0.18"
-# egui = "0.21"
+egui = "0.21"
 # egui_dock = "0.4"
 # egui-gizmo = "0.10"
