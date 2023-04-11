@@ -6,4 +6,25 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = "0.10.0"
+# all of bevy
+bevy = "0.10"
+bevy_app = { version = "0.10" }
+bevy_asset = { version = "0.10" }
+bevy_core = { version = "0.10" }
+bevy_ecs = { version = "0.10" }
+bevy_hierarchy = { version = "0.10" }
+bevy_log = { version = "0.10" }
+bevy_math = { version = "0.10" }
+bevy_reflect = { version = "0.10" }
+bevy_utils = { version = "0.10" }
+bevy_window = { version = "0.10" }
+bevy_core_pipeline = { version = "0.10" }
+bevy_pbr = { version = "0.10", optional = true }
+bevy_render = { version = "0.10" }
+
+# egui
+bevy_egui = "0.20"
+bevy-inspector-egui = "0.18"
+egui = "0.21"
+egui_dock = "0.4"
+egui-gizmo = "0.10"
