@@ -2,14 +2,16 @@ mod components;
 mod editor;
 
 use bevy::prelude::*;
+use bevy::render::camera::RenderTarget;
 use editor::EditorPlugin;
-use components::MainCamera;
+use components::{MainCamera, Viewport};
 
 fn main() {
     App::new()
+        .init_resource::<Viewport>()
         .add_plugins(DefaultPlugins)
         .add_plugin(EditorPlugin)
-        .add_plugin(bevy_egui::EguiPlugin)
+        // .add_plugin(bevy_egui::EguiPlugin)
         .add_startup_system(setup)
         .register_type::<Option<Handle<Image>>>()
         .register_type::<AlphaMode>()
@@ -20,6 +22,7 @@ fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    mut viewport: ResMut<Viewport>
 ) {
     let box_size = 2.0;
     let box_thickness = 0.15;
@@ -144,14 +147,32 @@ fn setup(
         ..Default::default()
     });
 
+    println!("Viewport set? {}", viewport.setup);
+
     // camera
-    commands.spawn((
-        Camera3dBundle {
-            transform: Transform::from_xyz(0.0, box_offset, 4.0)
-                .looking_at(Vec3::new(0.0, box_offset, 0.0), Vec3::Y),
-            ..Default::default()
-        },
-        MainCamera,
-        // PickRaycastSource,
-    ));
+    if viewport.image_handle.is_some() {
+        commands.spawn((
+            Camera3dBundle {
+                transform: Transform::from_xyz(0.0, box_offset, 4.0)
+                    .looking_at(Vec3::new(0.0, box_offset, 0.0), Vec3::Y),
+                camera: Camera {
+                    target: RenderTarget::Image(viewport.image_handle.clone().expect("WTF")),
+                    ..default()
+                },
+                ..Default::default()
+            },
+            MainCamera,
+            // PickRaycastSource,
+        ));
+    } else {
+        commands.spawn((
+            Camera3dBundle {
+                transform: Transform::from_xyz(0.0, box_offset, 4.0)
+                    .looking_at(Vec3::new(0.0, box_offset, 0.0), Vec3::Y),
+                ..Default::default()
+            },
+            MainCamera,
+            // PickRaycastSource,
+        ));
+    }
 }
