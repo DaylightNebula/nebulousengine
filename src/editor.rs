@@ -55,7 +55,21 @@ fn render_ui(mut contexts: EguiContexts, viewport: ResMut<Viewport>, mut rendere
     }
 
     // add image handle to ui
-    egui::SidePanel::left("side_panel").show(contexts.ctx_mut(), |ui| {
+    egui::TopBottomPanel::top("top_panel").show(contexts.ctx_mut(), |ui| {
+        egui::menu::bar(ui, |ui| {
+            egui::menu::menu_button(ui, "File", |ui| {
+                if ui.button("Quit").clicked() {
+                    std::process::exit(0);
+                }
+            });
+        });
+    });
+    egui::SidePanel::left("files").resizable(true).min_width(200.0).show(contexts.ctx_mut(), |ui| {
+        egui::ScrollArea::vertical().show(ui, |ui| {
+            ui.label("bob");
+        });
+    });
+    egui::CentralPanel::default().show(contexts.ctx_mut(), |ui| {
         ui.add(egui::widgets::Image::new(
             *rendered_texture_id,
             [512.0, 512.0]
