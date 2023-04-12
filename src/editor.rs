@@ -1,8 +1,11 @@
 use bevy::prelude::*;
 use bevy::render::render_resource::*;
 use bevy_egui::*;
+use std::fs;
 
 use crate::components::Viewport;
+
+// const defaultFilePath: char[] = "../egui";
 
 pub struct EditorPlugin;
 
@@ -58,21 +61,35 @@ fn render_ui(mut contexts: EguiContexts, viewport: ResMut<Viewport>, mut rendere
     egui::TopBottomPanel::top("top_panel").show(contexts.ctx_mut(), |ui| {
         egui::menu::bar(ui, |ui| {
             egui::menu::menu_button(ui, "File", |ui| {
-                if ui.button("Quit").clicked() {
-                    std::process::exit(0);
-                }
+                if ui.button("Open Project...").clicked() { println!("TODO open project") }
+                if ui.button("New Project...").clicked() { println!("TODO new project") }
             });
         });
     });
-    egui::SidePanel::left("files").resizable(true).min_width(100.0).show(contexts.ctx_mut(), |ui| {
-        egui::ScrollArea::both().show(ui, |ui| {
-            ui.label("bob");
-        });
-    });
+    render_files(contexts.ctx_mut());
     egui::CentralPanel::default().show(contexts.ctx_mut(), |ui| {
         ui.add(egui::widgets::Image::new(
             *rendered_texture_id,
             [512.0, 512.0]
         ));
+    });
+}
+
+fn render_files(ctx: &egui::Context) {
+    let paths = fs::read_dir("./").unwrap(); // todo file watching and caching
+
+    egui::SidePanel::left("files").resizable(true).min_width(100.0).show(ctx, |ui| {
+        egui::ScrollArea::both().show(ui, |ui| {
+            for p in paths {
+                let path = p.unwrap();
+                let file_type = path.file_type().unwrap();
+
+                if file_type.is_dir() {
+                    println!("Dir");
+                } else {
+                    println!("File");
+                }
+            }
+        });
     });
 }
