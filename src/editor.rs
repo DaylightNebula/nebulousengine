@@ -64,8 +64,8 @@ fn render_ui(mut contexts: EguiContexts, viewport: ResMut<Viewport>, mut rendere
             });
         });
     });
-    egui::SidePanel::left("files").resizable(true).min_width(200.0).show(contexts.ctx_mut(), |ui| {
-        egui::ScrollArea::vertical().show(ui, |ui| {
+    egui::SidePanel::left("files").resizable(true).min_width(100.0).show(contexts.ctx_mut(), |ui| {
+        egui::ScrollArea::both().show(ui, |ui| {
             ui.label("bob");
         });
     });
