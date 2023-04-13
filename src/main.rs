@@ -1,5 +1,5 @@
-mod editor;
 mod components;
+mod editor;
 
 use bevy::prelude::*;
 use bevy::render::camera::RenderTarget;

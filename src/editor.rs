@@ -1,11 +1,10 @@
 use bevy::prelude::*;
 use bevy::render::render_resource::*;
 use bevy_egui::*;
-use std::fs;
-
 use crate::components::Viewport;
+use self::files_editor_panel::render_files;
 
-// const defaultFilePath: char[] = "../egui";
+pub mod files_editor_panel;
 
 pub struct EditorPlugin;
 
@@ -72,24 +71,5 @@ fn render_ui(mut contexts: EguiContexts, viewport: ResMut<Viewport>, mut rendere
             *rendered_texture_id,
             [512.0, 512.0]
         ));
-    });
-}
-
-fn render_files(ctx: &egui::Context) {
-    let paths = fs::read_dir("./").unwrap(); // todo file watching and caching
-
-    egui::SidePanel::left("files").resizable(true).min_width(100.0).show(ctx, |ui| {
-        egui::ScrollArea::both().show(ui, |ui| {
-            for p in paths {
-                let path = p.unwrap();
-                let file_type = path.file_type().unwrap();
-
-                if file_type.is_dir() {
-                    println!("Dir");
-                } else {
-                    println!("File");
-                }
-            }
-        });
     });
 }

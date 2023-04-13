@@ -1,5 +1,5 @@
 [package]
-name = "NebulousEngine"
+name = "nebulousengine"
 version = "0.1.0"
 edition = "2021"
 
@@ -26,7 +26,4 @@ bevy_render = { version = "0.10" }
 
 # # egui
 bevy_egui = "0.20"
-# # bevy-inspector-egui = "0.18"
 egui = "0.21"
-# egui_dock = "0.4"
-# egui-gizmo = "0.10"
