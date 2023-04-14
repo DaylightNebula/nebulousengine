@@ -8,17 +8,18 @@ use nebulousengine_editor::EditorPlugin;
 
 fn main() {
     App::new()
-        // .add_plugins(DefaultPlugins)
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                title: "Nebulous Engine Game".into(), // todo make this dynamic
-                present_mode: PresentMode::AutoNoVsync,
-                ..default()
-            }),
-            ..default()
-        }))
-        .add_plugin(LogDiagnosticsPlugin::default())
-        .add_plugin(FrameTimeDiagnosticsPlugin::default())
+        .add_plugins(DefaultPlugins)
+        // .add_plugins(DefaultPlugins.set(WindowPlugin {
+        //     primary_window: Some(Window {
+        //         title: "Nebulous Engine Game".into(), // todo make this dynamic
+        //         present_mode: PresentMode::AutoNoVsync,
+                
+        //         ..default()
+        //     }),
+        //     ..default()
+        // }))
+        // .add_plugin(LogDiagnosticsPlugin::default())
+        // .add_plugin(FrameTimeDiagnosticsPlugin::default())
         .add_plugin(EditorPlugin)
         .add_startup_system(setup)
         .add_system(rotate)
