@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy::render::render_resource::*;
 use bevy_egui::*;
-use crate::components::Viewport;
+use nebulousengine_components::Viewport;
 use self::files_editor_panel::render_files;
 
 pub mod files_editor_panel;

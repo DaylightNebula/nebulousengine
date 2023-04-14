@@ -3,27 +3,19 @@ name = "nebulousengine"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# [workspace]
+# members = [
+#     "crates/*"
+# ]
 
 [dependencies]
-# all of bevy
-bevy = "0.10"
-# bevy_app = { version = "0.10" }
-# bevy_asset = { version = "0.10" }
-# bevy_core = { version = "0.10" }
-# bevy_ecs = { version = "0.10" }
-# bevy_hierarchy = { version = "0.10" }
-# bevy_log = { version = "0.10" }
-# bevy_math = { version = "0.10" }
-# bevy_reflect = { version = "0.10" }
-# bevy_utils = { version = "0.10" }
-bevy_window = { version = "0.10" }
-# bevy_core_pipeline = { version = "0.10" }
-# bevy_pbr = { version = "0.10", optional = true }
-bevy_render = { version = "0.10" }
+# bevy
+bevy = "0.10.1"
 
-# belly = { git = "https://github.com/jkb0o/belly.git" }
-
-# # egui
+# egui
 bevy_egui = "0.20"
 egui = "0.21"
+
+# internal
+nebulousengine_components = { path = "./crates/components" }
+nebulousengine_editor = { path = "./crates/editor" }

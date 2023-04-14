@@ -1,11 +1,8 @@
-mod components;
-mod editor;
-
 use bevy::prelude::*;
 use bevy::render::camera::RenderTarget;
 
-use crate::editor::*;
-use crate::components::*;
+use nebulousengine_components::Viewport;
+use nebulousengine_editor::EditorPlugin;
 
 fn main() {
     App::new()
