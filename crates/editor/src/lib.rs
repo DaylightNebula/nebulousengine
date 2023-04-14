@@ -1,7 +1,6 @@
 use bevy::prelude::*;
 use bevy::render::camera::{RenderTarget, Viewport};
 use bevy::render::render_resource::*;
-use bevy::window::PrimaryWindow;
 use bevy_egui::*;
 use nebulousengine_components::{ViewportContainer, MainCamera};
 use self::files_editor_panel::render_files;
@@ -26,15 +25,14 @@ impl Plugin for EditorPlugin {
 fn setup_viewport(
     mut images: ResMut<Assets<Image>>,
     mut viewport: ResMut<ViewportContainer>,
-    window_query: Query<&mut Window, With<PrimaryWindow>>,
-    mut cameras: Query<&mut Camera, With<MainCamera>>
+    // window_query: Query<&mut Window, With<PrimaryWindow>>,
+    mut cameras: Query<&mut Camera, With<MainCamera>>,
+    mut last_size: Local<Extent3d>
 ) {
-    // setup size
-    let window = window_query.single();
-    let size = Extent3d { width: window.width() as u32, height: window.height() as u32, depth_or_array_layers: 1 };
-    viewport.size = size;
-    // let size = viewport.size;
-    // println!("Size {} {}", size.width, size.height);
+    let size = viewport.size;
+    if *last_size == size { return; }
+    *last_size = size;
+    println!("Updating render image");
 
     // This is the texture that will be rendered to.
     let mut image = Image {
@@ -72,7 +70,7 @@ fn setup_viewport(
     )
 }
 
-fn render_ui(mut contexts: EguiContexts, viewport: ResMut<ViewportContainer>, mut rendered_texture_id: Local<egui::TextureId>, mut is_initialized: Local<bool>, tabs: ResMut<EditorTabs>) {
+fn render_ui(mut contexts: EguiContexts, viewport: ResMut<ViewportContainer>, mut rendered_texture_id: Local<egui::TextureId>, tabs: ResMut<EditorTabs>) {
     // make sure we have an image handle
     if viewport.image_handle.is_none() { return }
 
