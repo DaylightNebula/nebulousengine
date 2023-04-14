@@ -75,7 +75,7 @@ fn render_ui(mut contexts: EguiContexts, viewport: ResMut<Viewport>, mut rendere
         render_files(ui)
     });
 
-    render_editor(contexts, tabs.into_inner());
+    render_editor(contexts, viewport, rendered_texture_id, tabs.into_inner());
 }
 
 // Example how to insert render image
