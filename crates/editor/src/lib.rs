@@ -1,7 +1,9 @@
 use bevy::prelude::*;
+use bevy::render::camera::{RenderTarget, Viewport};
 use bevy::render::render_resource::*;
+use bevy::window::PrimaryWindow;
 use bevy_egui::*;
-use nebulousengine_components::Viewport;
+use nebulousengine_components::{ViewportContainer, MainCamera};
 use self::files_editor_panel::render_files;
 use self::editor_panel::*;
 
@@ -13,18 +15,26 @@ pub struct EditorPlugin;
 impl Plugin for EditorPlugin {
     fn build(&self, app: &mut App) {
         app
+            .init_resource::<ViewportContainer>()
             .insert_resource(EditorTabs::new())
             .add_plugin(EguiPlugin)
-            .add_startup_system(setup_viewport)
-            .add_system(render_ui);
+            .add_system(setup_viewport)
+            .add_system(render_ui.after(setup_viewport));
     }
 }
 
 fn setup_viewport(
     mut images: ResMut<Assets<Image>>,
-    mut viewport: ResMut<Viewport>
+    mut viewport: ResMut<ViewportContainer>,
+    window_query: Query<&mut Window, With<PrimaryWindow>>,
+    mut cameras: Query<&mut Camera, With<MainCamera>>
 ) {
-    let size = viewport.size;
+    // setup size
+    let window = window_query.single();
+    let size = Extent3d { width: window.width() as u32, height: window.height() as u32, depth_or_array_layers: 1 };
+    viewport.size = size;
+    // let size = viewport.size;
+    // println!("Size {} {}", size.width, size.height);
 
     // This is the texture that will be rendered to.
     let mut image = Image {
@@ -46,18 +56,27 @@ fn setup_viewport(
     // fill image.data with zeroes
     image.resize(size);
 
+    // create and set image handles
     let image_handle = images.add(image);
     viewport.image_handle = Some(image_handle.clone());
+
+    // set render target
+    let mut cam = cameras.single_mut();
+    cam.target = RenderTarget::Image(viewport.image_handle.clone().expect("hi"));
+    cam.viewport = Some(
+        Viewport {
+            physical_size: UVec2 { x: size.width, y: size.height },
+            physical_position: UVec2 { x: 0, y: 0 },
+            depth: 0.0..1.0
+        }
+    )
 }
 
-fn render_ui(mut contexts: EguiContexts, viewport: ResMut<Viewport>, mut rendered_texture_id: Local<egui::TextureId>, mut is_initialized: Local<bool>, tabs: ResMut<EditorTabs>) {
+fn render_ui(mut contexts: EguiContexts, viewport: ResMut<ViewportContainer>, mut rendered_texture_id: Local<egui::TextureId>, mut is_initialized: Local<bool>, tabs: ResMut<EditorTabs>) {
     // make sure we have an image handle
     if viewport.image_handle.is_none() { return }
 
-    if !*is_initialized {
-        *is_initialized = true;
-        *rendered_texture_id = contexts.add_image(viewport.image_handle.clone().expect("why"));
-    }
+    *rendered_texture_id = contexts.add_image(viewport.image_handle.clone().expect("why"));
 
     // create side panel for files and menu buttons
     egui::SidePanel::left("master_left").resizable(true).min_width(100.0).show(contexts.ctx_mut(), |ui| { 

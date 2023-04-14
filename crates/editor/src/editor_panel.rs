@@ -1,7 +1,7 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, render::render_resource::Extent3d};
 use bevy_egui::EguiContexts;
 use egui::*;
-use nebulousengine_components::Viewport;
+use nebulousengine_components::ViewportContainer;
 
 #[derive(Resource)]
 pub struct EditorTabs {
@@ -18,7 +18,7 @@ impl EditorTabs {
     }
 }
 
-pub fn render_editor(mut contexts: EguiContexts, viewport: ResMut<Viewport>, mut rendered_texture_id: Local<egui::TextureId>, tabs: &mut EditorTabs) {
+pub fn render_editor(mut contexts: EguiContexts, viewport: ResMut<ViewportContainer>, mut rendered_texture_id: Local<egui::TextureId>, tabs: &mut EditorTabs) {
     
     egui::TopBottomPanel::top("tab_buttons_container").show(contexts.ctx_mut(), |ui| {
         render_editor_tabs(ui, tabs);
@@ -41,11 +41,12 @@ fn render_editor_tabs(ui: &mut Ui, tabs: &mut EditorTabs) {
     });
 }
 
-fn render_editor_main(ui: &mut Ui, viewport: ResMut<Viewport>, mut rendered_texture_id: Local<egui::TextureId>, tabs: &mut EditorTabs) {
-    let img = viewport.image_handle.as_ref().unwrap();
+fn render_editor_main(ui: &mut Ui, mut viewport: ResMut<ViewportContainer>, rendered_texture_id: Local<egui::TextureId>, tabs: &mut EditorTabs) {
+    let rect = ui.max_rect();
+    viewport.size = Extent3d { width: rect.width() as u32, height: rect.height() as u32, depth_or_array_layers: 1 };
     ui.add(egui::widgets::Image::new(
         *rendered_texture_id,
-        [viewport.size.width.to_owned() as f32, viewport.size.height.to_owned() as f32]
+        [ rect.width(), rect.height() ]
     ));
 }
 // Example how to insert render image
