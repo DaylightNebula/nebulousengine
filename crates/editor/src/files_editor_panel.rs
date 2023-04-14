@@ -1,16 +1,13 @@
 use egui::Ui;
 use std::fs::{self, ReadDir, DirEntry};
 
-pub fn render_files(ctx: &egui::Context) {
+pub fn render_files(ui: &mut Ui) {
     let master_path = fs::read_dir("./").unwrap(); // todo file watching and caching
 
-    // create the files side panel
-    egui::SidePanel::left("files").resizable(true).min_width(100.0).show(ctx, |ui| {
-        // create scroll area for the files
-        egui::ScrollArea::both().show(ui, |ui| {
-            // render the contents of the master path
-            render_directory_contents(ui, master_path);
-        });
+    // create scroll area for the files
+    egui::ScrollArea::both().show(ui, |ui| {
+        // render the contents of the master path
+        render_directory_contents(ui, master_path);
     });
 }
 

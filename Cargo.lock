@@ -1412,6 +1412,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "egui_dock"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be7e6eb63cb936413bd2a4f54be4a9ef53a48252f25864f5f946d4954d7332bd"
+dependencies = [
+ "egui",
+]
+
+[[package]]
 name = "emath"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2284,6 +2293,7 @@ dependencies = [
  "bevy",
  "bevy_egui",
  "egui",
+ "egui_dock",
  "nebulousengine_components",
 ]
 
